@@ -57,13 +57,18 @@ jobs:
           jf npm-config --repo-resolve ${{ env.NPM_REPO }} --server-id-resolve ${{ env.SERVER_ID }}
 
       - name: Install dependencies
-        run: jf npm ci --module=node_webapp
+        run: |
+          cd ${{ env.SRC_FOLDER }} 
+          jf npm ci --module=node_webapp
 
       - name: Scan dependencies
-        run:  jf audit 
+        run: | 
+          cd ${{ env.SRC_FOLDER }} 
+          jf audit 
 
       - name: Package and upload webapp
         run: |
+          cd ${{ env.SRC_FOLDER }} 
           npm run build && cd build
           tar -czvf webapp_node_gha_${{ github.sha }}.tar.gz *
           jf rt upload webapp_node_gha_${{ github.sha }}.tar.gz ${{ env.GENERIC_REPO }} \
@@ -118,7 +123,7 @@ jobs:
         with:
           registry: ${{ env.DOCKER_REG }}
           username: ${{ env.DOCKER_USER }}
-          password: ${{ secrets.RT_SECRET }}
+          password: ${{ secrets.DOCKER_SECRET }}
 
       - name: Build Docker images
         uses: docker/build-push-action@v3
