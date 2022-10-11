@@ -130,6 +130,7 @@ jobs:
             RT_TOKEN=${{ secrets.DOCKER_SECRET }}
             RT_USER=${{ env.DOCKER_USER }}
             REGISTRY=${{ env.DOCKER_REG }}
+            PYTHON_REPO=punch-python
           context: ${{ env.SRC_FOLDER }}
           tags: ${{ env.DOCKER_REG }}/${{ env.DOCKER_REPO }}/gha-python-webapp:${{ env.APP_VERSION }}
 
