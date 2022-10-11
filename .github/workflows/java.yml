@@ -11,10 +11,11 @@ on:
 
 env:
   JF_ENV_1: ${{ secrets.JF_SECRET }}
-  JF_ID: yann-sbx
+  JF_ID: jfrog-platform
   JF_CLI_VERSION: 2.27.1
   APP_VERSION: 2.0.0
-  MVN_REPO: urs-mvn
+  MVN_REPO: one-mvn
+  SRC_FOLDER: java-demo/src
    
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -22,15 +23,14 @@ jobs:
     if: ${{ true }}
     runs-on: ubuntu-latest
     env:
-      JF_ENV_1: ${{ secrets.JF_SECRET }}
       JFROG_BUILD_STATUS: PASS
       JAVA_VERSION: 16.0.2+7
       JAVA_DIST: zulu
       MVN_VERSION: 3.8.2
       # required by jf CLI
       # M2_HOME: /opt/hostedtoolcache/maven/3.8.2/x64 # NOT required in jf CLI v2.3.0
-      MVN_REPO: urs-mvn
-      PROMOTE_REPO: urs-mvn-release-local
+      MVN_REPO: one-mvn
+      PROMOTE_REPO: one-mvn-release-local
     steps:
       - uses: actions/checkout@v2
 
@@ -68,10 +68,10 @@ jobs:
                   --repo-deploy-snapshots=${{ env.MVN_REPO }}
 
       - name: Scan dependencies
-        run:  cd src && jf audit
+        run:  cd ${{ env.SRC_FOLDER }} && jf audit
 
       - name: Build webapp and scan generated artifact before upload
-        run: jf mvn clean install -f src/  --no-transfer-progress
+        run: jf mvn clean install -f ${{ env.SRC_FOLDER }}/  --no-transfer-progress
         
       - name: Publish Build Info
         run: |
@@ -94,10 +94,10 @@ jobs:
     runs-on: ubuntu-latest
     env:
       DOCKER_REG: yann-sbx.dev.gcp.devopsacc.team
-      DOCKER_REPO: urs-docker
-      DOCKER_USER: admin
-      SRC_REPO: urs-docker-dev-local
-      PROMOTE_REPO: urs-docker-release-local
+      DOCKER_REPO: one-docker
+      DOCKER_USER: ci
+      SRC_REPO: one-docker-dev-local
+      PROMOTE_REPO: one-docker-release-local
     steps:
       - uses: actions/checkout@v2
 
@@ -115,19 +115,19 @@ jobs:
             --build-name=docker-$JFROG_CLI_BUILD_NAME --build-number=$JFROG_CLI_BUILD_NUMBER \
             --fail-no-op=true \
             --module=webapp \
-            ${{ env.MVN_REPO }} src/multi-module-application.jar
+            ${{ env.MVN_REPO }} ${{ env.SRC_FOLDER }}/multi-module-application.jar
 
       - name: Docker Login
         uses: docker/login-action@v1.10.0
         with:
           registry: ${{ env.DOCKER_REG }}
           username: ${{ env.DOCKER_USER }}
-          password: ${{ secrets.RT_SECRET }}
+          password: ${{ secrets.DOCKER_SECRET }}
 
       - name: Build Docker image
         uses: docker/build-push-action@v2.6.1
         with:
-          context: src/
+          context: ${{ env.SRC_FOLDER }}/
           tags: ${{ env.DOCKER_REG }}/${{ env.DOCKER_REPO }}/gha-java-webapp:${{ env.APP_VERSION }}
           build-args: REGISTRY=${{ env.DOCKER_REG }}
 
@@ -143,12 +143,3 @@ jobs:
           jf rt bce docker-$JFROG_CLI_BUILD_NAME $JFROG_CLI_BUILD_NUMBER
           jf rt bag docker-$JFROG_CLI_BUILD_NAME $JFROG_CLI_BUILD_NUMBER
           jf rt bp docker-$JFROG_CLI_BUILD_NAME $JFROG_CLI_BUILD_NUMBER
-
-      # - name: Scan Build 
-      #   run: jf bs --fail=false docker-$jf_CLI_BUILD_NAME $jf_CLI_BUILD_NUMBER
-
-      # - name: Deploy and Test 
-      #   run: echo deploy and run test
-
-      # - name: Promote Build 
-      #   run: jf rt bpr --fail-fast=false --status "XRAY_SCAN_OK" --source-repo ${{ env.SRC_REPO }} --comment "promoted to the next level" docker-$jf_CLI_BUILD_NAME $jf_CLI_BUILD_NUMBER ${{ env.PROMOTE_REPO }}
