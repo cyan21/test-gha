@@ -6,8 +6,10 @@ name: python-webapp-gha
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
   push:
-    branches: [ dev/swampup ]
-
+    branches: 
+      - main
+    paths:
+      - 'python-demo/**'
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
@@ -17,7 +19,8 @@ env:
   SERVER_ID: yann-saas-basic-auth
   JF_CLI_VERSION: 2.27.1
   APP_VERSION: 2.0.0
-  GENERIC_REPO: urs-generic
+  GENERIC_REPO: punch-generic
+  SRC_FOLDER: python-demo/src
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -26,8 +29,8 @@ jobs:
     env:
       JFROG_BUILD_STATUS: PASS
       PYTHON_VERSION: 3.9
-      PYTHON_REPO: urs-python
-      PROMOTE_REPO: urs-generic-release-local
+      PYTHON_REPO: punch-python
+      PROMOTE_REPO: punch-generic-release-local
     steps:
       - uses: actions/checkout@v2
 
@@ -48,7 +51,9 @@ jobs:
             jf rt ping
             
       - name: Configure JFrog CLI and PIP client
-        run: jf pip-config --repo-resolve ${{ env.PYTHON_REPO }} --server-id-resolve ${{ env.SERVER_ID }}
+        run: |
+          cd ${{ env.SRC_FOLDER }}
+          jf pip-config --repo-resolve ${{ env.PYTHON_REPO }} --server-id-resolve ${{ env.SERVER_ID }}
 
       - name: Scan dependencies
         run:  cd src && jf audit 
@@ -87,9 +92,9 @@ jobs:
     runs-on: ubuntu-latest
     env:
       DOCKER_REG: yann.jfrog.io
-      DOCKER_REPO: urs-docker
-      DOCKER_USER: yannc@jfrog.com
-      PROMOTE_REPO: urs-docker-release-local
+      DOCKER_REPO: punch-docker
+      DOCKER_USER: ci
+      PROMOTE_REPO: punch-docker-release-local
     steps:
       - uses: actions/checkout@v2
 
@@ -100,6 +105,7 @@ jobs:
 
       - name: Download webapp
         run: |
+          cd ${{ env.SRC_FOLDER }}
           jf rt download \
             --props "version=${{ env.APP_VERSION }}" \
             --build $JFROG_CLI_BUILD_NAME/$JFROG_CLI_BUILD_NUMBER  \
@@ -111,13 +117,13 @@ jobs:
         with:
           registry: ${{ env.DOCKER_REG }}
           username: ${{ env.DOCKER_USER }}
-          password: ${{ secrets.RT_SECRET }}
+          password: ${{ secrets.DOCKER_SECRET }}
 
       - name: Build Docker images
         uses: docker/build-push-action@v3
         with:
           build-args: |
-            RT_TOKEN=${{ secrets.RT_SECRET }}
+            RT_TOKEN=${{ secrets.DOCKER_SECRET }}
             RT_USER=${{ env.DOCKER_USER }}
             REGISTRY=${{ env.DOCKER_REG }}
           context: src/
