@@ -95,7 +95,7 @@ jobs:
     needs: build_webapp
     runs-on: ubuntu-latest
     env:
-      DOCKER_REG: yann.jfrog.io
+      DOCKER_REG: yann-sbx.dev.gcp.devopsacc.team
       DOCKER_REPO: punch-docker
       DOCKER_USER: ci
       PROMOTE_REPO: punch-docker-release-local
