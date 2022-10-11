@@ -56,7 +56,7 @@ jobs:
           jf pip-config --repo-resolve ${{ env.PYTHON_REPO }} --server-id-resolve ${{ env.SERVER_ID }}
 
       - name: Scan dependencies
-        run:  cd src && jf audit 
+        run:  jf audit 
 
       - name: Install dependencies
         run: jf pip install -r src/requirements.txt --no-cache-dir --module=python_webapp
