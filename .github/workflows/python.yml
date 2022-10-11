@@ -16,7 +16,7 @@ on:
 env:
   JF_ENV_1: ${{ secrets.JF_SECRET }}
   # the server_id is injected in the JF_SECRET and refers to the CLI profile name
-  SERVER_ID: yann-saas-basic-auth
+  SERVER_ID: jfrog-platform
   JF_CLI_VERSION: 2.27.1
   APP_VERSION: 2.0.0
   GENERIC_REPO: punch-generic
