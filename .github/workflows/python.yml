@@ -56,14 +56,17 @@ jobs:
           jf pip-config --repo-resolve ${{ env.PYTHON_REPO }} --server-id-resolve ${{ env.SERVER_ID }}
 
       - name: Scan dependencies
-        run:  jf audit 
+        run: |
+          cd ${{ env.SRC_FOLDER }} jf audit 
 
       - name: Install dependencies
-        run: jf pip install -r src/requirements.txt --no-cache-dir --module=python_webapp
+        run: |
+          cd ${{ env.SRC_FOLDER }}
+          jf pip install -r src/requirements.txt --no-cache-dir --module=python_webapp
 
       - name: Package and upload webapp
         run: |
-          cd src 
+          cd ${{ env.SRC_FOLDER }}
           tar -czvf webapp_python_gha_${{ github.sha }}.tar.gz *.yaml *.txt *.py
           jf rt upload webapp_python_gha_${{ github.sha }}.tar.gz ${{ env.GENERIC_REPO }} \
             --target-props "maturity=release-candidate;platform=windows,linux;test.unit=ready" \
