@@ -63,7 +63,7 @@ jobs:
       - name: Install dependencies
         run: |
           cd ${{ env.SRC_FOLDER }}
-          jf pip install -r src/requirements.txt --no-cache-dir --module=python_webapp
+          jf pip install -r requirements.txt --no-cache-dir --module=python_webapp
 
       - name: Package and upload webapp
         run: |
@@ -114,7 +114,7 @@ jobs:
             --props "version=${{ env.APP_VERSION }}" \
             --build $JFROG_CLI_BUILD_NAME/$JFROG_CLI_BUILD_NUMBER  \
             --build-name=docker-$JFROG_CLI_BUILD_NAME --build-number=$JFROG_CLI_BUILD_NUMBER \
-            ${{ env.GENERIC_REPO }} src/webapp_python.tar.gz
+            ${{ env.GENERIC_REPO }} webapp_python.tar.gz
 
       - name: Docker Login
         uses: docker/login-action@v1.10.0
