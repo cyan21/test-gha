@@ -100,8 +100,8 @@ jobs:
       - name: Run test 
         run: echo running tests ...
 
-      - name: Promote Build 
-        run: jf rt bpr --fail-fast=false --status "TEST_OK" --comment "promoted to the next level" ${{ env.PROMOTE_REPO }}
+      # - name: Promote Build 
+      #   run: jf rt bpr --fail-fast=false --status "TEST_OK" --comment "promoted to the next level" ${{ env.PROMOTE_REPO }}
   
   build_docker:
     if: ${{ true }}

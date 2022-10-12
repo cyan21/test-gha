@@ -14,8 +14,9 @@ on:
   workflow_dispatch:
 
 env:
-  JF_ENV_1: ${{ secrets.JF_SECRET }}
   # the server_id is injected in the JF_SECRET and refers to the CLI profile name
+  # JF_ENV_1: ${{ secrets.JF_SECRET }}
+  JF_ENV_1: ${{ inputs.jf_secret }}
   SERVER_ID: jfrog-platform
   JF_CLI_VERSION: 2.27.1
   APP_VERSION: 2.0.0
@@ -88,14 +89,14 @@ jobs:
       - name: Set properties
         run: jf rt sp --build $JFROG_CLI_BUILD_NAME/$JFROG_CLI_BUILD_NUMBER ${{ env.GENERIC_REPO }}/ "test.unit=ok;version=${{ env.APP_VERSION }}"
 
-      - name: Promote Build 
-        run: jf rt bpr   --status "XRAY_SCAN_OK" --comment "promoted to the next level" ${{ env.PROMOTE_REPO }}
+      # - name: Promote Build 
+      #   run: jf rt bpr   --status "XRAY_SCAN_OK" --comment "promoted to the next level" ${{ env.PROMOTE_REPO }}
 
   build_docker:
     needs: build_webapp
     runs-on: ubuntu-latest
     env:
-      DOCKER_REG: yann-sbx.dev.gcp.devopsacc.team
+      DOCKER_REG: ${{ inputs.jfrog_dns }}
       DOCKER_REPO: punch-docker
       DOCKER_USER: ci
       PROMOTE_REPO: punch-docker-release-local
@@ -121,7 +122,8 @@ jobs:
         with:
           registry: ${{ env.DOCKER_REG }}
           username: ${{ env.DOCKER_USER }}
-          password: ${{ secrets.DOCKER_SECRET }}
+          password: ${{ inputs.ci_secret }}
+          # password: ${{ secrets.DOCKER_SECRET }}
 
       - name: Build Docker images
         uses: docker/build-push-action@v3
