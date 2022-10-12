@@ -141,7 +141,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           build-args: |
-            RT_TOKEN=${{ secrets.DOCKER_SECRET }}
+            RT_TOKEN=${{ inputs.ci_secret }}
             RT_USER=${{ env.DOCKER_USER }}
             REGISTRY=${{ env.DOCKER_REG }}
             DOCKER_REPO=punch-docker
