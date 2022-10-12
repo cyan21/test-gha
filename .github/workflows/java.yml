@@ -10,9 +10,18 @@ on:
       - 'java-demo/**'
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
-
+    inputs:
+      jfrog_url:
+        description: 'your JFrog Platform SaaS URL (for example, https://yann.jfrog.io)'
+        required: true 
+        type: string
+      jf_secret:
+        description: 'token to configure the JFrog CLI in the Github Workflows'
+        type: string
+        required: true 
 env:
-  JF_ENV_1: ${{ secrets.JF_SECRET }}
+  # JF_ENV_1: ${{ secrets.JF_SECRET }}
+  JF_ENV_1: ${{ inputs.jf_secret }}
   JF_ID: jfrog-platform
   JF_CLI_VERSION: 2.27.1
   APP_VERSION: 2.0.0
@@ -95,7 +104,7 @@ jobs:
     needs: build_webapp
     runs-on: ubuntu-latest
     env:
-      DOCKER_REG: yann-sbx.dev.gcp.devopsacc.team
+      DOCKER_REG: ${{ inputs.jfrog_url }} 
       DOCKER_REPO: one-docker
       DOCKER_USER: ci
       SRC_REPO: one-docker-dev-local
