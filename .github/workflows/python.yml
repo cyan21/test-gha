@@ -12,7 +12,19 @@ on:
       - 'python-demo/**'
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
-
+    inputs:
+      jfrog_dns:
+        description: 'your JFrog Platform SaaS URL (for example, yann.jfrog.io)'
+        required: true 
+        type: string
+      jf_secret:
+        description: 'token to configure the JFrog CLI in the Github Workflows'
+        type: string
+        required: true 
+      ci_secret:
+        description: 'ci user s password'
+        type: string
+        required: true 
 env:
   # the server_id is injected in the JF_SECRET and refers to the CLI profile name
   # JF_ENV_1: ${{ secrets.JF_SECRET }}
