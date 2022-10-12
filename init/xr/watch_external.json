@@ -1,0 +1,27 @@
+{
+    "general_data": {
+        "name": "external_apps",
+        "description": "Created via API for the punch team",
+        "active": true
+    },
+    "project_resources": {
+        "resources": [
+            {
+                "type": "repository",
+                "name": "one-mvn-dev-local",
+                "filters": [
+                    {
+                        "type": "regex",
+                        "value": ".*"
+                    }
+                ]
+            }
+        ]
+    },
+    "assigned_policies": [
+        {
+            "name": "external_security",
+            "type": "security"
+        }
+    ]
+}
