@@ -16,11 +16,11 @@ on:
         required: true 
         type: string
       jf_secret:
-        description: 'token to configure the JFrog CLI in the Github Workflows'
+        description: 'token to configure the JFrog CLI in the Github Workflows (JF_SECRET)'
         type: string
         required: true 
       ci_secret:
-        description: 'ci user s password'
+        description: 'ci user s password (JF_CI_SECRET)'
         type: string
         required: true 
 env:
