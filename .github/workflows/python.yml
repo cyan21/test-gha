@@ -18,18 +18,18 @@ on:
         required: true 
         type: string
       jf_secret:
-        description: 'token to configure the JFrog CLI in the Github Workflows'
+        description: 'token to configure the JFrog CLI in the Github Workflows (JF_SECRET)'
         type: string
         required: true 
       ci_secret:
-        description: 'ci user s password'
+        description: 'ci user s password (JF_CI_SECRET)'
         type: string
         required: true 
 env:
   # the server_id is injected in the JF_SECRET and refers to the CLI profile name
   # JF_ENV_1: ${{ secrets.JF_SECRET }}
   JF_ENV_1: ${{ inputs.jf_secret }}
-  SERVER_ID: jfrog-platform
+  SERVER_ID: jfrog-platform-training
   JF_CLI_VERSION: 2.27.1
   APP_VERSION: 2.0.0
   GENERIC_REPO: punch-generic

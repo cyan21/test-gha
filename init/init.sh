@@ -55,5 +55,5 @@ echo "In Github, create these 2 secrets :"
 echo -e "\t  - JF_SECRET : $jf_secret"
 
 # B/ show the ci user's password
-echo -e "\t  - DOCKER_SECRET : $password"
+echo -e "\t  - JF_CI_SECRET : $password"
 echo "*********************************"

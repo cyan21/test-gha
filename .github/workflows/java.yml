@@ -26,7 +26,7 @@ on:
 env:
   # JF_ENV_1: ${{ secrets.JF_SECRET }}
   JF_ENV_1: ${{ inputs.jf_secret }}
-  JF_ID: jfrog-platform
+  JF_ID: jfrog-platform-training
   JF_CLI_VERSION: 2.27.1
   APP_VERSION: 2.0.0
   MVN_REPO: one-mvn
