@@ -69,7 +69,7 @@ jobs:
       - name: Configure JFrog CLI and NPM client
         run: |
           cd ${{ env.SRC_FOLDER }} 
-          jf npm-config --repo-resolve ${{ env.NPM_REPO }} --server-id-resolve ${{ env.SERVER_ID }}
+          jf npm-config --repo-resolve ${{ env.NPM_REPO }} --server-id-resolve ${{ env.SERVER_ID }} --global=true
 
       - name: Install dependencies
         run: |
