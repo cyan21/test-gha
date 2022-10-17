@@ -75,7 +75,6 @@ jobs:
         run: |
           cd ${{ env.SRC_FOLDER }} 
           jf c s
-          cat .jfrog/projects/npm.yaml
           jf npm ci --module=node_webapp
 
       - name: Scan dependencies
