@@ -28,7 +28,7 @@ on:
         required: true 
 env:
   # the server_id is injected in the JF_SECRET and refers to the CLI profile name
-  JF_ENV_1: ${{ secrets.JF_SECRET }}
+  # JF_ENV_1: ${{ secrets.JF_SECRET }}
   # JF_ENV_1: ${{ inputs.jf_secret }}
   SERVER_ID: jfrog-platform-training
   JF_CLI_VERSION: 2.27.1
@@ -50,6 +50,10 @@ jobs:
 
       - name: Setup JFrog CLI
         uses: jfrog/setup-jfrog-cli@v2
+        env:
+            JF_URL: https://${{ inputs.jfrog_dns }}    
+            JF_USER: ci
+            JF_PASSWORD: ${{ inputs.ci_secret }}
         with:
           version: ${{ env.JF_CLI_VERSION }}
     
