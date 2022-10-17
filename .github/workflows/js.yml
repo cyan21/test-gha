@@ -78,7 +78,7 @@ jobs:
         run: |
           cd ${{ env.SRC_FOLDER }} 
           jf c s
-          jf npm ci --module=node_webapp
+          jf npm install --module=node_webapp
 
       - name: Scan dependencies
         run: | 
