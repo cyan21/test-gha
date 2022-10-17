@@ -145,7 +145,9 @@ jobs:
         with:
           context: ${{ env.SRC_FOLDER }}/
           tags: ${{ env.DOCKER_REG }}/${{ env.DOCKER_REPO }}/gha-java-webapp:${{ env.APP_VERSION }}
-          build-args: REGISTRY=${{ env.DOCKER_REG }}
+          build-args: |
+              REGISTRY=${{ env.DOCKER_REG }}
+              DOCKER_REPO=punch-docker
 
       - name: Scan Docker image
         run: |
