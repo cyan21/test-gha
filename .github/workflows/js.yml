@@ -63,6 +63,8 @@ jobs:
             jf --version
             jf config show
             jf rt ping
+            jf rt curl api/system/info
+
             
       - name: Configure JFrog CLI and NPM client
         run: |
