@@ -63,3 +63,4 @@ if [[ $ci_created == "true" ]]; then
     echo -e "\t  - JF_CI_SECRET : $password"
 fi
 echo "*********************************"
+echo tutu
