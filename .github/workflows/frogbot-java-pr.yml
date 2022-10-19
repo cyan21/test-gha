@@ -5,6 +5,8 @@ on:
 permissions:
   pull-requests: write
   contents: read
+env:
+  MVN_REPO: one-mvn
 jobs:
   scan-pull-request:
     runs-on: ubuntu-latest
@@ -22,6 +24,18 @@ jobs:
         with:
           java-version: "11"
           distribution: "temurin"
+
+      - uses: jfrog/setup-jfrog-cli@v2
+        env:
+          JF_URL: ${{ secrets.JF_URL }}
+          JF_USER: ${{ secrets.JF_USER }}
+          JF_PASSWORD: ${{ secrets.JF_PASSWORD }}
+
+      - name: Configure JFrog CLI with Maven client
+        run: | 
+          jf mvnc --global \
+                  --repo-resolve-releases=${{ env.MVN_REPO }}	\
+                  --repo-resolve-snapshots=${{ env.MVN_REPO }}	\
 
       - uses: jfrog/frogbot@v2
         env:
@@ -54,6 +68,7 @@ jobs:
           # [Optional, default: "."]
           # Relative path to the project in the git repository
           JF_WORKING_DIR: java-demo/src/application
+          JF_INSTALL_DEPS_CMD: "jf mvn package"
 
           # [Optional]
           # Xray Watches. Learn more about them here: https://www.jfrog.com/confluence/display/JFROG/Configuring+Xray+Watches
