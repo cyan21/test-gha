@@ -53,7 +53,7 @@ jobs:
 
           # [Optional, default: "."]
           # Relative path to the project in the git repository
-          JF_WORKING_DIR: java-demo/src/application/pom.xml
+          JF_WORKING_DIR: java-demo/src/application
 
           # [Optional]
           # Xray Watches. Learn more about them here: https://www.jfrog.com/confluence/display/JFROG/Configuring+Xray+Watches
